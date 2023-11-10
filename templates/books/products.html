@@ -1,0 +1,188 @@
+{% extends 'tadmin/base.html'%}
+
+{% load static %}
+<!-- BLOCK FOR TITLE -->
+
+{% block title %}
+ Admin Dashboard
+{% endblock title %}
+
+<!-- END BLOCK FOR TITLE -->
+
+<!-- BLOCK FOR CUSTOM CSS -->
+{% block custom_css %}
+
+<style>
+  .pagination {
+    margin-left:400px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination .pagination-link {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: 1px solid #3498db;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block; /* Align links horizontally */
+}
+
+.pagination .pagination-link:hover {
+    background-color: #2980b9;
+}
+
+.current-page {
+    margin: 5px;
+    display: inline-block; /* Align the current page text horizontally */
+}
+
+</style>
+{% endblock custom_css %}
+
+<!--END BLOCK FOR CUSTOM CSS -->
+
+<!-- BLOCK FOR PAGE TITLE -->
+
+{% block page_title %}
+Product Section
+
+{% endblock page_title %}
+
+<!-- END BLOCK FOR PAGE TITLE -->
+
+<!-- BLOCK FOR PAGE MAIN CONTENT  -->
+
+{% block page_content %}
+
+<div class="container">
+    <div class="container">
+      <form action="" method="POST">{% csrf_token %}
+        <div class="input-group">
+          <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+            {% comment %} <span class="input-group-text" id="search">
+              <i class="icon-search"></i> 
+            </span> {% endcomment %}
+          </div>
+          <input style="background-color:#FFFFF0
+          ;" type="text" name="searchitem" class="form-control mt-3" id="navbar-search-input" placeholder="Search product" aria-label="search" aria-describedby="search">
+          <div>
+            <button  type="submit" class="btn btn-primary btn-block mt-3 ml-3">Search</button>
+            
+          </div>
+        </div>
+      
+      </form>
+    
+    </div>
+  
+    <div class="row justify-content-end">
+      <a href="{% url 'addproduct' %}">
+        <button class="btn add-product-btn btn-primary mt-2">Add Product</button>
+      </a>
+    </div>
+    
+    
+    <div class="container">
+      <div class="row">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Image</th>
+              <th>Edit</th>
+              <th>Delete</th>
+          
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in datas %}
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.category.name }}</td>
+                <td style="max-width: 1000px; white-space: normal">{{ item.description }}</td>
+
+                {% comment %}  {% endcomment %}
+
+                <td>
+                  {% if item.image1 %}
+                      <img src="{{ item.image1.url }}" width="100px" alt="">
+                  {% else %}
+                      No Image Available
+                  {% endif %}
+              </td>
+              
+
+
+                {% comment %}  {% endcomment %}
+                {% comment %} <td><img src="{{ item.image2.url }}"width="100px" alt=""></td> {% endcomment %}
+                <td>
+                  
+                    <a href="{% url 'editproduct' item.id %}">
+
+                    <button class="btn edit-btn btn-warning">Edit</button>
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'delete_product' item.id %}">
+                  <button  type="button" class="btn delete-btn btn-danger" data-category-id="{{ item.id }}">Delete</button>
+              
+                </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+    
+      </div>
+      
+    
+    
+    </div>
+    
+  
+  </div>
+  
+  <div class="pagination">
+    <span class="step-links">
+        {% if datas.has_previous %}
+            <a class="pagination-link" href="?page=1">&laquo; first</a>
+            <a class="pagination-link" href="?page={{ datas.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current-page">
+            Page {{ datas.number }} of {{ datas.paginator.num_pages }}.
+        </span>
+
+        {% if datas.has_next %}
+            <a class="pagination-link" href="?page={{ datas.next_page_number }}">next</a>
+            <a class="pagination-link" href="?page={{ datas.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+  
+  
+  
+  
+  
+  
+            
+{% endblock page_content %}
+
+<!-- END BLOCK FOR PAGE MAIN CONTENT  -->
+
+<!-- BLOCK FOR CUSTOM JS -->
+
+{% block custom_js %}
+{% endblock custom_js %}
+
+  <!-- END BLOCK FOR CUSTOM JS -->
+

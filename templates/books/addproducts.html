@@ -1,0 +1,116 @@
+{% extends 'tadmin/base.html'%}
+
+{% load static %}
+<!-- BLOCK FOR TITLE -->
+
+{% block title %}
+Admin Dashboard
+{% endblock title %}
+
+<!-- END BLOCK FOR TITLE -->
+
+<!-- BLOCK FOR CUSTOM CSS -->
+{% block custom_css %}
+{% endblock custom_css %}
+
+<!--END BLOCK FOR CUSTOM CSS -->
+
+<!-- BLOCK FOR PAGE TITLE -->
+
+{% block page_title %}
+Add product Section
+
+{% endblock page_title %}
+
+<!-- END BLOCK FOR PAGE TITLE -->
+
+<!-- BLOCK FOR PAGE MAIN CONTENT  -->
+
+{% block page_content %}
+
+  <form class="p-5" method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}
+          
+    <div class="form-group mt-2">
+      {% comment  %} {% for item in content  %} {% endcomment %}
+      <label for="username">Name</label>
+      <input value="{{name}}" name="name" type="text" class="form-control" id="username" placeholder="Enter Product Name">
+      {% if error and "name" in error %}
+      <span style="color: red">{{error.name}}</span>
+      {% endif %}
+    </div>
+    <div class="form-group mt-2">
+      <label for="email">Price</label>
+      <input value="{{price}}" name="price" type="text" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter Price">
+      
+      {% if error and "price" in error %}
+      <span style="color: red">{{error.price}}</span>
+      {% endif %}{% comment %} <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> {% endcomment %}
+    </div>
+    <div class="form-group mt-2">
+      <label for="inputPassword">Quantity</label>
+      
+      {% if error and "quantity" in error %}
+      <span style="color: red">{{error.quantity}}</span>
+      {% endif %}<input  value="{{quantity}}"  name="quantity" type="text" class="form-control" id="inputPassword" placeholder="Enter Quantity">
+    </div>
+    <div class="form-group mt-2">
+      <label for="inputPassword">Category</label>
+      <select id="dropdown" name="category">
+        {% for item in categoryobjs  %}
+        <option value="{{item.name}}">{{item.name}}<br><br> </option>
+        {% endfor %}
+  
+      </select> 
+
+    </div>
+    <div class="form-group mt-2">
+        <label for="inputConfirmPassword">Description </label>
+        
+        {% if error and "description" in error %}
+        <span style="color: red">{{error.description}}</span>
+        {% endif %}<input value="{{description}}"  name="description" type="text" class="form-control" id="inputConfirmPassword" placeholder="Description">
+    </div>
+    
+{% comment %} Add Image1,image2,image3,image4 {% endcomment %}
+
+    <div class="mb-3">
+      <label for="image1">Image 1</label>
+      <div class="card-img-top">
+       
+      </div>
+      <input type="file" class="form-control" id="image1" name="image1" accept="image/*">
+    </div>
+    <div class="mb-3">
+      <label for="image2">Image 2</label>
+      
+      <input type="file" class="form-control" id="image2" name="image2" accept="image/*">
+    </div>
+    <div class="mb-3">
+      <label for="image3">Image 3</label>
+      <div class="card-img-top">
+        
+      </div>
+      <input type="file" class="form-control mt-3" id="image3" name="image3" accept="image/*">
+    </div>
+    <div class="mb-3">
+      <label for="image4">Image 4</label>
+      <div class="card-img-top">
+        
+      </div>
+      <input type="file" class="form-control mt-3" id="image4" name="image4" accept="image/*">
+    </div>
+
+
+    <button type="submit" class="btn btn-primary mt-4">Add Product</button>
+    <h5>{{successmsg}} </h5>
+
+    {% endblock page_content %}
+
+    <!-- END BLOCK FOR PAGE MAIN CONTENT  -->
+    
+    <!-- BLOCK FOR CUSTOM JS -->
+    
+    {% block custom_js %}
+    {% endblock custom_js %}
+    
+      <!-- END BLOCK FOR CUSTOM JS -->

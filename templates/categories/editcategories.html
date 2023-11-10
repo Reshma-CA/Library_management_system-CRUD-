@@ -1,0 +1,61 @@
+{% extends 'tadmin/base.html'%}
+
+{% load static %}
+<!-- BLOCK FOR TITLE -->
+
+{% block title %}
+Admin Dashboard
+{% endblock title %}
+
+<!-- END BLOCK FOR TITLE -->
+
+<!-- BLOCK FOR CUSTOM CSS -->
+{% block custom_css %}
+{% endblock custom_css %}
+
+<!--END BLOCK FOR CUSTOM CSS -->
+
+<!-- BLOCK FOR PAGE TITLE -->
+
+{% block page_title %}
+Category Section
+
+{% endblock page_title %}
+
+<!-- END BLOCK FOR PAGE TITLE -->
+
+<!-- BLOCK FOR PAGE MAIN CONTENT  -->
+
+{% block page_content %}
+
+<form class="p-5" method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}
+          
+    <div class="form-group mt-2">
+      {% comment %} {% for item in content  %} {% endcomment %}
+      <label for="username">Category Name</label>
+      <input value="{{obj.name}}" name="name" type="text" class="form-control" id="username" placeholder="Enter Category Name">
+      {% if error and "name" in error %}
+      <span class="text-danger"> {{error.name}}</span>
+      
+      {% endif %}
+
+
+      <br><br>
+      <label for="username">Quantity</label>
+      <input value="{{obj.No_of_items}}" name="No_of_items" type="number" class="form-control" id="username" placeholder="Enter Quantity">
+
+      <div class="mb-3">
+
+        <br><br>
+        <label for="image">Image</label>
+        <div class="card-img-top">
+         
+        </div>
+        <input type="file" class=" form-control" id="image" name="image" accept="image/*">
+      </div>
+
+
+    </div>
+    <button type="submit" class="btn btn-warning mt-4">Edit</button>
+
+{% endblock page_content %}

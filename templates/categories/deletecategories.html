@@ -1,0 +1,39 @@
+{% extends 'tadmin/base.html' %}
+{% load static %}
+
+{% block title %}
+Admin Dashboard
+{% endblock title %}
+
+{% block custom_css %}
+{% endblock custom_css %}
+
+{% block page_title %}
+Delete Category Section
+{% endblock page_title %}
+
+{% block page_content %}
+
+<form class="p-5" method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+          
+    <div class="form-group mt-2">
+        <label for="username">Category Name</label>
+        <input value="{{ content.name }}" name="name" type="text" class="form-control" id="username" placeholder="Enter Category Name" readonly>
+
+        <br><br>
+        <label for="username">Quantity</label>
+        <input value="{{ content.No_of_items }}" name="No_of_items" type="number" class="form-control" id="username" placeholder="Enter Quantity" readonly>
+
+        <div class="mb-3">
+            <br><br>
+            <label for="image">Image</label>
+            <div class="card-img-top">
+                <img src="{{ content.image.url }}" alt="{{ obj.name }}" width="100">
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-warning mt-4">Delete</button>
+</form>
+
+{% endblock page_content %}

@@ -1,0 +1,151 @@
+{% extends 'base.html'%}
+
+{% load static %}
+<!-- BLOCK FOR TITLE -->
+
+{% block title %}
+Admin Dashboard
+{% endblock title %}
+
+<!-- END BLOCK FOR TITLE -->
+
+<!-- BLOCK FOR CUSTOM CSS -->
+{% block custom_css %}
+{% endblock custom_css %}
+
+<!--END BLOCK FOR CUSTOM CSS -->
+
+<!-- BLOCK FOR PAGE TITLE -->
+
+{% block page_title %}
+Category Section
+
+{% endblock page_title %}
+
+<!-- END BLOCK FOR PAGE TITLE -->
+
+<!-- BLOCK FOR PAGE MAIN CONTENT  -->
+
+{% block page_content %}
+
+<div class="container">
+  <div class="container">
+    <form action="" method="POST">{% csrf_token %}
+      <div class="input-group">
+        <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+          
+        </div>
+        <input style="background-color:#FFFFF0
+        ;" type="text" name="searchitem" class="form-control mt-3" id="navbar-search-input" placeholder="Search user" aria-label="search" aria-describedby="search">
+        <div>
+          <button  type="submit" class="btn btn-primary btn-block mt-3 ml-3">Search</button>
+          
+        </div>
+      </div>
+    
+    </form>
+  
+  </div>
+
+
+
+  <div class="row justify-content-end">
+    <a href="{% url 'addcategories' %}">
+      <button class="btn add-category-btn btn-primary mt-2">Add Category</button>
+    </a>
+  </div>
+
+
+
+
+  <div class="row">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Image</th>
+          <th>Edit</th>
+          <th>Delete</th>
+          <th>Block</th>
+        </tr>
+      </thead>
+      <tbody>
+
+
+        {% for item in datas %}
+        <tr>
+          <td class="py-1">{{ item.name }}</td>
+       
+
+          <td>
+            {% if item.image %}
+                <img src="{{ item.image.url }}" width="100px" alt="" class="rounded-circle">
+            {% else %}
+                No Image Available
+            {% endif %}
+        </td>
+        
+          <td class="py-1">
+            <a href="{% url 'editcategories' item.id %}">
+              <button class="btn edit-btn btn-warning">Edit</button>
+            </a>
+          </td>
+
+          <td class="py-1">
+            <a href="{% url 'deletecategories' item.id %}">
+              <button class="btn edit-btn btn-info">Delete</button>
+            </a>
+          </td>
+
+          <td class="py-1">
+          
+             {% if item.isblocked %} 
+           
+              <a href={% url 'blockcategories' item.id %}>
+
+                <button id="blockbutton1{{item.id}}"   type="button " class="btn delete-btn btn-success blockbtn{{item.id}}" data-category-id="{{ item.id }}" onclick="return confirm('Are you sure you want to unblock this user?')">Unblock</button>
+
+                          
+              </a>
+              {% endif %}  
+
+            {% if not item.isblocked %}
+
+            <a href={% url 'blockcategories' item.id %}>
+
+              <button id="blockbutton2{{item.id}}" type="button" class="btn delete-btn btn-danger blockbtn{{item.id}}" data-category-id="{{ item.id }}" onclick="return confirm('Are you sure you want to block this user?')" >Block</button>
+            
+            </a>
+
+            {% endif %} 
+            
+          </td>
+
+          
+
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+ </div>
+</div>
+
+
+
+
+
+
+
+{% endblock page_content %}
+
+{% comment %} <!- END BLOCK FOR PAGE MAIN CONTENT  --> {% endcomment %}
+
+<!-- BLOCK FOR CUSTOM JS -->
+
+{% block custom_js %}
+{% endblock custom_js %}
+
+  <!-- END BLOCK FOR CUSTOM JS -->
+
