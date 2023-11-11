@@ -19,6 +19,10 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+from django.shortcuts import render, redirect
+from .forms import AdminLoginForm
+from .models import Admin
+
 
 def admin_signup(request):
     if request.method == 'POST':
@@ -36,32 +40,6 @@ def admin_signup(request):
         form = AdminSignupForm()
     
     return render(request, 'signup.html', {'form': form})
-
-
-
-
-# def admin_login(request):
-#     if request.method == 'POST':
-#         form = AdminLoginForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             password = form.cleaned_data['password']
-            
-#             # Check if admin with provided credentials exists
-#             if Admin.objects.filter(email=email, password=password).exists():
-#                 # Perform login action (you might want to use Django's authentication framework)
-#                  # session creation
-#                 return redirect('admin_home')  # Replace 'dashboard' with your actual admin dashboard URL
-#             else:
-#                 return render(request, 'login.html', {'form': form, 'error': 'Invalid email or password.'})
-#     else:
-#         form = AdminLoginForm()
-    
-#     return render(request, 'login.html', {'form': form})
-
-from django.shortcuts import render, redirect
-from .forms import AdminLoginForm
-from .models import Admin
 
 def admin_login(request):
     if request.method == 'POST':
@@ -83,22 +61,27 @@ def admin_login(request):
                 request.session['admin_id'] = admin.id
                 request.session['admin_email'] = admin.email
 
-                return redirect('admin_home')  # Replace 'admin_home' with your actual admin dashboard URL
+                return redirect('acategories')  # Replace 'admin_home' with your actual admin dashboard URL
             else:
                 return render(request, 'login.html', {'form': form, 'error': 'Invalid email or password.'})
-    else:
-        form = AdminLoginForm()
     
+    # Check if admin is already logged in
+    if 'admin_id' in request.session:
+        return redirect('admin_home')  # Redirect to admin dashboard if already logged in
+
+    form = AdminLoginForm()
     return render(request, 'login.html', {'form': form})
 
 
 def admin_home(request):
-    return render(request,'adminhome.html')
+    return render(request,'categories\categories.html')
 
 @never_cache  
 def adminCategory(request):
+    
     # Retrieve all categories from the database
     categories = Book_Category.objects.all()
+    
 
     if request.method == "POST":
         # Handle the search functionality
@@ -183,10 +166,45 @@ def deletecategories(request, myid):
 
     }
 
-    return render(request, "tadmin/categories/deletecategories.html",{'content':category})
+    return render(request, "categories\deletecategories.html",{'content':category})
 
+def blockcategories(request,myid):
+    content = Book_Category.objects.get(id=myid)
+    
+    if content.isblocked==True:
+        content.isblocked=False
+        content.save()
+        return redirect('acategories')
+    
+    elif content.isblocked==False:
+        content.isblocked=True
+        content.save()
+        return redirect('acategories')
+    
+@never_cache
+def adminBooks(request):
+    
+        datas = Book.objects.all()
+        page = request.GET.get('page')  # Get the current page number from the request's GET parameters
+        per_page = 4  # You can change this to your desired number of items per page
 
-def addproducts(request):
+        if request.method == "POST":
+            enteredproduct = request.POST.get("searchitem")
+            datas = Book.objects.filter(name__istartswith=enteredproduct)
+
+        paginator = Paginator(datas, per_page)
+        try:
+            datas = paginator.page(page)
+        except PageNotAnInteger:
+            datas = paginator.page(1)
+        except EmptyPage:
+            datas = paginator.page(paginator.num_pages)
+
+        return render(request, "books/products.html", {"datas": datas})
+    # else:
+    #     return redirect('admin_login')
+
+def addBooks(request):
     categoryobjs = Book_Category.objects.all()
     error = {}
 
@@ -229,11 +247,11 @@ def addproducts(request):
                 image3=image3,
                 image4=image4
             )
-            return redirect('aproducts')
+            return redirect('adminbooks')
 
-    return render(request, "tadmin/products/addproducts.html", {"error": error, "categoryobjs": categoryobjs})
+    return render(request, "books/addproducts.html", {"error": error, "categoryobjs": categoryobjs})
 
-def editproducts(request,myid):
+def editBooks(request,myid):
     content = Book.objects.get(id=myid)
     categoryobjs = Book_Category.objects.all()
     error = {}
@@ -287,7 +305,7 @@ def editproducts(request,myid):
             else:
                 content.category = categoryobject
                 content.save()
-                return redirect('aproducts')
+                return redirect('adminbooks')
 
         if error:
             return render(request, "books/editproducts.html", {"content": content, "error": error, "categoryobjs": categoryobjs})
@@ -295,44 +313,20 @@ def editproducts(request,myid):
     return render(request, "books/editproducts.html", {"content": content, "categoryobjs": categoryobjs})
     
 
-@never_cache
-def adminProducts(request):
-    if "ausername" in request.session:
-        datas = Book.objects.all()
-        page = request.GET.get('page')  # Get the current page number from the request's GET parameters
-        per_page = 10  # You can change this to your desired number of items per page
-
-        if request.method == "POST":
-            enteredproduct = request.POST.get("searchitem")
-            datas = Book.objects.filter(name__istartswith=enteredproduct)
-
-        paginator = Paginator(datas, per_page)
-        try:
-            datas = paginator.page(page)
-        except PageNotAnInteger:
-            datas = paginator.page(1)
-        except EmptyPage:
-            datas = paginator.page(paginator.num_pages)
-
-        return render(request, "books/products.html", {"datas": datas})
-    else:
-        return redirect('admin_login')
-    
-
-
-
-
-def delete_products(request,myid):
+def delete_Books(request,myid):
     product = get_object_or_404(Book, id=myid)
     if request.method == 'POST':
         # Delete the product if the request method is POST
         product.delete()
-        return redirect('aproducts')  # Redirect to the product list page after deletion
+        return redirect('adminbooks')  # Redirect to the product list page after deletion
     context = {
         'content': product,
     }
 
     return render(request, 'books/deleteproducts.html', {'content': product})
    
-
+def admin_logout(request):
+    if 'admin_id' in request.session:
+        request.session.flush()
+    return redirect('admin_login')
     

@@ -12,40 +12,20 @@
         {% comment %} <li class="menu-header">Dashboard</li> {% endcomment %}
         <li class="dropdown active">
           <a href="#" ><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a> 
-          <a href="{% url 'acategories'%}" ><i class="fas fa-user"></i><span>Book</span></a>
-          <a href="{% url 'aproducts'%}" ><i class="fas fa-th-list"></i><span>Categories</span></a>
-          {% comment %} <a href="#" ><i class="fas fa-shopping-cart"></i><span>Products</span></a>
-          <a href="#" ><i class="fas fa-shopping-bag"></i><span>Orders</span></a> 
-          <a href="#" ><i class="fas fa-tags"></i><span>Category Offer</span></a>
-          <a href="#" ><i class="fas fa-percent"></i><span>Product Offer</span></a>
-          <a href="#" ><i class="fas fa-ticket-alt"></i><span>Coupons</span></a>
-          <a href="#" ><i class="fas fa-chart-line"></i><span>Sales Report</span></a> {% endcomment %}
+          <a href="{% url 'acategories'%}" ><i class="fas fa-th-list"></i><span>Categories</span></a>
+          <a href="{% url 'adminbooks'%}" ><i class="fas fa-user"></i><span>Book</span></a>
+          
 
-          {% comment %} ####################################################### {% endcomment %}
-
-
-
-          {% comment %} <ul class="dropdown-menu">
-            <li><a class="nav-link" href="index-0.html">General Dashboard</a></li>
-            <li class=active><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
-          </ul> {% endcomment %}
+         
         </li>
-        {% comment %} <li class="menu-header">Starter</li>
-        <li class="dropdown">
-          <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Layout</span></a>
-          <ul class="dropdown-menu">
-            <li><a class="nav-link" href="layout-default.html">Default Layout</a></li>
-            <li><a class="nav-link" href="layout-transparent.html">Transparent Sidebar</a></li>
-            <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
-          </ul>
-        </li> {% endcomment %}
+        
        
       </ul>
 
 
 
       <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-        <a href="#" class="btn btn-primary btn-lg btn-block btn-icon-split">
+        <a href="{% url 'admin_logout'%}" class="btn btn-primary btn-lg btn-block btn-icon-split">
           <i class="fas fa-sign-out-alt"></i> Logout 
         </a>                
       </div>
